@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController {
     
     var alertController = UIAlertController()
     
@@ -21,18 +21,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-    }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return data.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath)
-        cell.textLabel?.text = data[indexPath.row]
-        
-        return cell
     }
     
     @IBAction func didTrashBarButtonTapped(_ sender: UIBarButtonItem){
@@ -107,5 +95,55 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource{
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "defaultCell", for: indexPath)
+        cell.textLabel?.text = data[indexPath.row]
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .normal,
+                                              title: "Delete") { _, _, _ in
+            self.data.remove(at: indexPath.row)
+            self.tableView.reloadData()
+        }
+        deleteAction.backgroundColor = .systemRed
+        
+        let config = UISwipeActionsConfiguration(actions: [deleteAction])
+        return config
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let editAction = UIContextualAction(style: .normal,
+                                            title: "Edit") { _, _, _ in
+            self.presentAlert(title: "Edit the element",
+                         message: nil,
+                         defaultButtonTitle: "edit",
+                         cancelButtonTitle: "Cancel",
+                         isTextFieldAvailable: true,
+                         defaultButtonHandler: {_ in
+                let text = self.alertController.textFields?.first?.text
+                if text != ""{
+                    self.data[indexPath.row] = text!
+                    self.tableView.reloadData()
+                } else {
+                    self.presentWarningAlert()
+                }
+            })
+        }
+        editAction.backgroundColor = .systemBlue
+        let config = UISwipeActionsConfiguration(actions: [editAction])
+        return config
+    }
 }
 
