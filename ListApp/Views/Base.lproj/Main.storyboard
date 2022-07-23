@@ -36,7 +36,19 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" title="ListApp" id="yMA-9C-0lw"/>
+                    <navigationItem key="navigationItem" title="ListApp" id="yMA-9C-0lw">
+                        <barButtonItem key="leftBarButtonItem" systemItem="trash" id="AKg-6h-Yzi">
+                            <color key="tintColor" systemColor="systemRedColor"/>
+                            <connections>
+                                <action selector="didTrashBarButtonTapped:" destination="BYZ-38-t0r" id="jnT-KK-pxC"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="77I-du-aCy">
+                            <connections>
+                                <action selector="didAddBarButtonItemTapped:" destination="BYZ-38-t0r" id="fF8-HL-dvH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="lii-fD-hwr" id="no2-H4-SY9"/>
                     </connections>
@@ -70,6 +82,9 @@
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

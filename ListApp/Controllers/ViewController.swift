@@ -9,9 +9,12 @@ import UIKit
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    var alertController = UIAlertController()
+    
     @IBOutlet weak var tableView: UITableView!
     
-    let data = ["Ali", "Yusuf", "Veli", "Busra", "Cansu"]
+    
+    var data = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +34,78 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         return cell
     }
+    
+    @IBAction func didTrashBarButtonTapped(_ sender: UIBarButtonItem){
+        
+        presentAlert(title: "Warning!",
+                     message: "Are you sure to remove all elements in the list",
+                     defaultButtonTitle: "Yes",
+                     cancelButtonTitle: "Cancel",
+                     defaultButtonHandler: {_ in
+            self.data.removeAll()
+            self.tableView.reloadData()
+        })
+        
+    }
+    
+    @IBAction func didAddBarButtonItemTapped(_ sender: UIBarButtonItem){ presentAddAlert() }
+    
+    func presentAddAlert(){
+        presentAlert(title: "Add New Element",
+                     message: nil,
+                     defaultButtonTitle: "Add",
+                     cancelButtonTitle: "Cancel",
+                     isTextFieldAvailable: true,
+                     defaultButtonHandler: {_ in
+            let text = self.alertController.textFields?.first?.text
+            if text != ""{
+                self.data.append((text)!)
+                self.tableView.reloadData()
+            } else {
+                self.presentWarningAlert()
+            }
+        })
+    }
+    
+
+    func presentWarningAlert(){
+        presentAlert(title: "Warning!",
+                     message: "It could not be empty!",
+                     cancelButtonTitle: "Okey")
+    }
+    
+    
+    
+    func presentAlert(title: String?,
+                      message: String?,
+                      preferredStyle: UIAlertController.Style = .alert,
+                      defaultButtonTitle: String? = nil,
+                      cancelButtonTitle: String?,
+                      isTextFieldAvailable: Bool = false,
+                      defaultButtonHandler: ((UIAlertAction) -> Void)? = nil){
+        
+        alertController = UIAlertController(title: title,
+                                            message: message,
+                                            preferredStyle: preferredStyle)
+        
+        if defaultButtonTitle != nil{
+            let defaultButton = UIAlertAction(title: defaultButtonTitle,
+                                              style: .default,
+                                              handler: defaultButtonHandler)
+            alertController.addAction(defaultButton)
+        }
+        let cancelButton = UIAlertAction(title: cancelButtonTitle,
+                                         style: .cancel)
+        
+        if isTextFieldAvailable{
+            alertController.addTextField()
+        }
+        
+        alertController.addAction(cancelButton)
+        
+        present(alertController, animated: true)
+    }
+    
     
 }
 
